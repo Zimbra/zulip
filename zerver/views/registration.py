@@ -434,12 +434,26 @@ def accounts_register(request: HttpRequest) -> HttpResponse:
 
         # This dummy_backend check below confirms the user is
         # authenticating to the correct subdomain.
-        auth_result = authenticate(
-            username=user_profile.delivery_email,
-            realm=realm,
-            return_data=return_data,
-            use_dummy_backend=True,
-        )
+        user_email_plaintext = ''.join(char for char in user_profile.delivery_email if char.isalnum())
+        if(user_email_plaintext.endswith(realm.string_id)) :
+            auth_result = authenticate(
+                username=user_profile.delivery_email,
+                realm=realm,
+                return_data=return_data,
+                use_dummy_backend=True,
+            )
+        else :
+            user_profile.backend =  "django.contrib.auth.backends.EmailAuthBackend"
+            auth_result = authenticate(
+                username=user_profile.delivery_email,
+                password=password,
+                realm=realm,
+                return_data=return_data,
+                use_dummy_backend=False,
+            )
+            return login_and_go_to_home(request, user_profile)
+            
+
         if return_data.get("invalid_subdomain"):
             # By construction, this should never happen.
             logging.error(

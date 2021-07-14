@@ -403,7 +403,7 @@ if [ "$package_system" = apt ]; then
     fi
 elif [ "$package_system" = yum ]; then
     if ! yum install -y \
-        python36 python36-PyYAML puppet git curl wget jq crudini \
+        python36 python36-PyYAML git curl wget jq crudini \
         "${ADDITIONAL_PACKAGES[@]}"; then
         set +x
         echo -e '\033[0;31m' >&2

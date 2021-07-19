@@ -188,13 +188,15 @@ if [[ "$LDAP_SERVER_PORT"  == "" ]]; then
     LDAP_SERVER_PORT=389
 fi
 
-while true; do
-    echo -n "Please enter LDAP password: "
-    read LDAP_PASSWORD
-    if [[ "$LDAP_PASSWORD"  != "" ]]; then
-        break
-    fi
-done 
+if [[ "$LDAP_PASSWORD"  == "" ]]; then
+    while true; do
+        echo -n "Please enter LDAP password: "
+        read LDAP_PASSWORD
+        if [[ "$LDAP_PASSWORD"  != "" ]]; then
+            break
+        fi
+    done
+fi
 
 echo -n "Please enter LDAP bind dn (default - uid=zimbra,cn=admins,cn=zimbra): "
 read LDAP_BIND_DN
@@ -594,6 +596,11 @@ if [ ! -d "$ZIMBRA_ZULIP_UPLOAD_DIR" ]; then
     mkdir -p "$ZIMBRA_ZULIP_UPLOAD_DIR"
 fi
 
+if [ ! -d "$DATA_DIR/conf/" ]; then
+    echo "Create directory $DATA_DIR/conf/"
+    mkdir -p $DATA_DIR/conf/
+fi
+
 # change upload data path
 chown zulip:zulip $ZIMBRA_ZULIP_UPLOAD_DIR
 ln -nsf $ZIMBRA_ZULIP_UPLOAD_DIR $ZULIP_UPLOAD_DIR
@@ -689,14 +696,6 @@ EOF
     fi
 fi
 
-# change rabbitmq data path
-echo "Update rabbitmq data dir to $RABBITMQ_DIR"
-systemctl stop rabbitmq-server
-sudo grep -q "^RABBITMQ_MNESIA_BASE="  $RABBITMQ_CONF_PATH && sudo sed "s|^RABBITMQ_MNESIA_BASE=[^\n]*|RABBITMQ_MNESIA_BASE=$RABBITMQ_DIR|" -i $RABBITMQ_CONF_PATH ||  sudo  sed "$ aRABBITMQ_MNESIA_BASE=$RABBITMQ_DIR" -i $RABBITMQ_CONF_PATH
-
-chown rabbitmq:rabbitmq $RABBITMQ_DIR
-systemctl start rabbitmq-server
-
 # generate ZIMBRA_JWT_AUTH_KEY
 sudo grep -q "^ZIMBRA_JWT_AUTH_KEY[[:blank:]]*=*[[:blank:]]*"  /etc/zulip/settings.py \
     || (JWT_AUTH_KEY=$(cat /dev/urandom | tr -cd 'a-f0-9' | head -c 32);  sudo sed "$ a\ZIMBRA_JWT_AUTH_KEY = \x27$JWT_AUTH_KEY\x27\n" -i /etc/zulip/settings.py)
@@ -784,6 +783,9 @@ fi
     su zulip -c "git config --global user.email $ZULIP_ADMINISTRATOR"
     su zulip -c "git config --global user.name 'Zulip Server ($EXTERNAL_HOST)'"
 )
+
+# copy settings
+cp -a /etc/zulip/. /opt/zimbra/data/zulip/conf/
 
 if [ -n "$NO_INIT_DB" ]; then
     set +x

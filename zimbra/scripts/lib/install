@@ -577,6 +577,7 @@ fi
 if [ ! -d "$DATA_DIR" ]; then 
     echo "Create directory $DATA_DIR"
     mkdir -p "$DATA_DIR"
+    chown zulip:zulip $DATA_DIR
 fi
 
 if [ ! -d "$POSTGRESQL_DATA_DIR" ]; then
@@ -592,6 +593,7 @@ fi
 if [ ! -d "$DATA_DIR/conf/" ]; then
     echo "Create directory $DATA_DIR/conf/"
     mkdir -p $DATA_DIR/conf/
+    chown zulip:zulip $DATA_DIR/conf/
 fi
 
 # change upload data path
@@ -778,7 +780,7 @@ fi
 )
 
 # copy settings
-cp -a /etc/zulip/. /opt/zimbra/data/zulip/conf/
+cp -a /etc/zulip/. $DATA_DIR/conf/
 
 if [ -n "$NO_INIT_DB" ]; then
     set +x

@@ -560,8 +560,6 @@ fi
 
 DATA_DIR=/opt/zimbra/data/zulip
 POSTGRESQL_DIR=$DATA_DIR/postgresql
-RABBITMQ_DIR=$DATA_DIR/rabbitmq
-RABBITMQ_CONF_PATH=/etc/rabbitmq/rabbitmq-env.conf
 ZULIP_UPLOAD_DIR=/home/zulip/uploads
 ZIMBRA_ZULIP_UPLOAD_DIR=$DATA_DIR/uploads
 
@@ -584,11 +582,6 @@ fi
 if [ ! -d "$POSTGRESQL_DATA_DIR" ]; then
     echo "Create directory $POSTGRESQL_DATA_DIR"
     mkdir -p "$POSTGRESQL_DATA_DIR"
-fi
-
-if [ ! -d "$RABBITMQ_DIR" ]; then
-    echo "Create directory $RABBITMQ_DIR"
-    mkdir -p "$RABBITMQ_DIR"
 fi
 
 if [ ! -d "$ZIMBRA_ZULIP_UPLOAD_DIR" ]; then

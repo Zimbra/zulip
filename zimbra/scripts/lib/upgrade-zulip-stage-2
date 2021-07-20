@@ -143,10 +143,10 @@ if glob.glob("/usr/share/postgresql/*/extension/tsearch_extras.control"):
         sql_query="DROP EXTENSION IF EXISTS tsearch_extras;",
     )
     if(vendor=='centos'):
-    subprocess.check_call(["yum", "remove", "-y", "postgresql-*-tsearch-extras"])
+        subprocess.check_call(["yum", "remove", "-y", "postgresql-*-tsearch-extras"])
 
     if(vendor=='ubuntu'):
-    subprocess.check_call(["apt-get", "remove", "-y", "postgresql-*-tsearch-extras"])
+        subprocess.check_call(["apt-get", "remove", "-y", "postgresql-*-tsearch-extras"])
 
 
 if not args.skip_puppet:

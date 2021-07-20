@@ -13,7 +13,7 @@ from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, HttpRes
 from zerver.decorator import do_login, log_view_func, process_client, require_post
 from zerver.lib.subdomains import get_subdomain, is_subdomain_root_or_alias
 from zerver.lib.request import REQ, JsonableError, has_request_variables
-from zerver.lib.response import json_error, json_success
+from zerver.lib.response import json_success
 from zerver.lib.actions import do_add_realm_domain, do_create_realm, do_deactivate_realm, do_change_user_delivery_email
 from zerver.views.auth import login_or_register_remote_user
 from zerver.lib.users import get_api_key,get_raw_user_data

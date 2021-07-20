@@ -82,21 +82,35 @@ def get_venv_dependencies(vendor: str, os_version: str) -> List[str]:
 
 
 def install_venv_deps(pip: str, requirements_file: str) -> None:
-        DEPS_ONE_DIR = ZULIP_PATH+"/packages/py-deps/1"
-        DEPS_TWO_DIR = ZULIP_PATH+"/packages/py-deps/2"
-        DEPS_THREE_DIR = ZULIP_PATH+"/packages/py-deps/3"
+    pip_requirements = os.path.join(ZULIP_PATH, "requirements", "pip.txt")
+    run([pip, "install", "--force-reinstall", "--require-hashes", "-r", pip_requirements])
+    run(
+        [
+            pip,
+            "install",
+            "--use-deprecated=legacy-resolver",  # https://github.com/pypa/pip/issues/5780
+            "--no-deps",
+            "--require-hashes",
+            "-r",
+            requirements_file,
+        ]
+    )       
+       
+#        DEPS_ONE_DIR = ZULIP_PATH+"/packages/py-deps/1"
+#        DEPS_TWO_DIR = ZULIP_PATH+"/packages/py-deps/2"
+#        DEPS_THREE_DIR = ZULIP_PATH+"/packages/py-deps/3"
 
-        list_wheel_1 = os.listdir(DEPS_ONE_DIR)
-        list_wheel_2 = os.listdir(DEPS_TWO_DIR)
-        list_wheel_3  = os.listdir(DEPS_THREE_DIR)
-        for i in list_wheel_1:
-            run([pip, "install", DEPS_ONE_DIR+"/"+i])
+#        list_wheel_1 = os.listdir(DEPS_ONE_DIR)
+#        list_wheel_2 = os.listdir(DEPS_TWO_DIR)
+#        list_wheel_3  = os.listdir(DEPS_THREE_DIR)
+#        for i in list_wheel_1:
+#            run([pip, "install", DEPS_ONE_DIR+"/"+i])
 
-        for j in list_wheel_2:
-            run([pip, "install", DEPS_TWO_DIR+"/"+j])
+#        for j in list_wheel_2:
+#            run([pip, "install", DEPS_TWO_DIR+"/"+j])
 
-        for k in list_wheel_3:
-            run([pip, "install", DEPS_THREE_DIR+"/"+k])
+#        for k in list_wheel_3:
+#            run([pip, "install", DEPS_THREE_DIR+"/"+k])
 
 
 def get_index_filename(venv_path: str) -> str:

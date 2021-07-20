@@ -781,6 +781,7 @@ fi
 
 # copy settings
 cp -a /etc/zulip/. $DATA_DIR/conf/
+chown -R zulip:zulip $DATA_DIR/conf/
 
 if [ -n "$NO_INIT_DB" ]; then
     set +x

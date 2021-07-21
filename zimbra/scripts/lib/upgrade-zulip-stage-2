@@ -14,6 +14,19 @@ import subprocess
 import sys
 import time
 from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from typing import NoReturn
+    
+
+os.environ["PYTHONUNBUFFERED"] = "y"
+
+# Force a known locale.  Some packages on PyPI fail to install in some locales.
+os.environ["LC_ALL"] = "en_US.UTF-8"
+os.environ["LANG"] = "en_US.UTF-8"
+os.environ["LANGUAGE"] = "en_US.UTF-8"
+
+sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
 from scripts.lib.zulip_tools import (
     assert_running_as_root,
     get_config,
@@ -23,39 +36,6 @@ from scripts.lib.zulip_tools import (
     run_psql_as_postgres,
     su_to_zulip,
 )
-
-if TYPE_CHECKING:
-    from typing import NoReturn
-
-
-# Do not upgrade on unsupported OS versions.
-UNSUPPORTED_DISTROS = [
-    ("ubuntu", "14.04"),
-    ("ubuntu", "16.04"),
-    ("debian", "9"),
-]
-distro_info = parse_os_release()
-vendor = distro_info["ID"]
-os_version = distro_info["VERSION_ID"]
-
-if (vendor, os_version) in UNSUPPORTED_DISTROS:
-    error_desupported_os(vendor, os_version)
-
-os.environ["PYTHONUNBUFFERED"] = "y"
-
-
-if(vendor=='centos'):
-    # Force a known locale.  Some packages on PyPI fail to install in some locales.
-    os.environ["LC_ALL"] = "en_US.UTF-8"
-    os.environ["LANG"] = "en_US.UTF-8"
-    os.environ["LANGUAGE"] = "en_US.UTF-8"
-else:
-    os.environ["LC_ALL"] = "C.UTF-8"
-    os.environ["LANG"] = "C.UTF-8"
-    os.environ["LANGUAGE"] = "C.UTF-8"
-
-sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
-
 
 assert_running_as_root()
 

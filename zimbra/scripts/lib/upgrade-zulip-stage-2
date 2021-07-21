@@ -17,7 +17,6 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from typing import NoReturn
-    
 
 os.environ["PYTHONUNBUFFERED"] = "y"
 
@@ -58,7 +57,18 @@ def error_desupported_os(vendor: str, os_version: str) -> "NoReturn":
     sys.exit(1)
 
 
+# Do not upgrade on unsupported OS versions.
+UNSUPPORTED_DISTROS = [
+    ("ubuntu", "14.04"),
+    ("ubuntu", "16.04"),
+    ("debian", "9"),
+]
+distro_info = parse_os_release()
+vendor = distro_info["ID"]
+os_version = distro_info["VERSION_ID"]
 
+if (vendor, os_version) in UNSUPPORTED_DISTROS:
+    error_desupported_os(vendor, os_version)
 
 # make sure we have appropriate file permissions
 os.umask(0o22)

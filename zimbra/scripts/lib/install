@@ -390,7 +390,7 @@ if [ "$mem_kb" -lt 1860000 ]; then
 fi
 
 if [ "$package_system" = apt ]; then
-    # Note that any additions to these lists must also be added to
+    # Note that any additions to these lists must also be added to  
     # `zulip::profile::base` such that the new dependency is seen by
     # upgrades, as well as new installs.
     if ! apt-get install -y \
@@ -632,12 +632,16 @@ if [ "$os_id" = centos ]; then
         sudo systemctl restart postgresql-10
     fi
   else
-    yum install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+    rpm -i --force https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+    yum install -y centos-release-scl-rh
+    yum install -y rh-postgresql10-postgresql-devel
     yum install -y postgresql10-server python-psycopg2 hunspell-en-US
     chown -R postgres:postgres $POSTGRESQL_DIR
     sed -i "s~^Environment=PGDATA=.*~Environment=PGDATA=$POSTGRESQL_DATA_DIR~" /usr/lib/systemd/system/postgresql-10.service
     sudo systemctl daemon-reload
-    /usr/pgsql-10/bin/postgresql-10-setup initdb
+    if [[ ! -f "$POSTGRESQL_DATA_DIR/PG_VERSION" ]]; then
+        /usr/pgsql-10/bin/postgresql-10-setup initdb
+    fi
     sudo systemctl restart postgresql-10
   fi
 fi

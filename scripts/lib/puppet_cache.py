@@ -20,11 +20,7 @@ def generate_sha1sum_puppet_modules() -> str:
     data = {}
     with open(PUPPET_DEPS_FILE_PATH, "r") as fb:
         data["deps.yaml"] = fb.read().strip()
-    data["puppet-version"] = subprocess.check_output(
-        # This is 10x faster than `puppet --version`
-        ["ruby", "-r", "puppet/version", "-e", "puts Puppet.version"],
-        universal_newlines=True,
-    ).strip()
+    data["puppet-version"] = "5.5.22"
 
     sha1sum = hashlib.sha1()
     sha1sum.update(json.dumps(data, sort_keys=True).encode("utf-8"))

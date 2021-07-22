@@ -382,6 +382,8 @@ if [ "$package_system" = apt ]; then
     # setup-apt-repo does an `apt-get update`
     "$ZULIP_PATH"/scripts/lib/setup-apt-repo
 elif [ "$package_system" = yum ]; then
+    export LC_ALL=en_US.UTF-8
+    export LANG=en_US.UTF-8
     "$ZULIP_PATH"/scripts/lib/setup-yum-repo
 fi
 

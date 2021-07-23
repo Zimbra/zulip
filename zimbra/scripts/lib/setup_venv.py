@@ -82,6 +82,7 @@ def get_venv_dependencies(vendor: str, os_version: str) -> List[str]:
 
 
 def install_venv_deps(pip: str, requirements_file: str, is_provision: bool) -> None:
+    run([pip, "install", "--upgrade", "pip" ])
     if is_provision:
         pip_requirements = os.path.join(ZULIP_PATH, "requirements", "pip.txt")
         run([pip, "install", "--force-reinstall", "--require-hashes", "-r", pip_requirements])
@@ -104,6 +105,7 @@ def install_venv_deps(pip: str, requirements_file: str, is_provision: bool) -> N
         list_wheel_1 = os.listdir(DEPS_ONE_DIR)
         list_wheel_2 = os.listdir(DEPS_TWO_DIR)
         list_wheel_3  = os.listdir(DEPS_THREE_DIR)
+        
         for i in list_wheel_1:
             run([pip, "install", DEPS_ONE_DIR+"/"+i])
 

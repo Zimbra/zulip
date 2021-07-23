@@ -98,7 +98,9 @@ fi
 rsync -av "${TMPDIR:?}/$prefix/zimbra/" "${TMPDIR:?}/$prefix/"
 
 while read -r i; do
-    rm -r --interactive=never "${TMPDIR:?}/$prefix/$i"
+    if [ -f "${TMPDIR:?}/$prefix/$i" ] || [ -d "${TMPDIR:?}/$prefix/$i" ]; then
+        rm -r --interactive=never "${TMPDIR:?}/$prefix/$i"
+    fi
 done <"$TMPDIR/$prefix/tools/release-tarball-exclude.txt"
 
 

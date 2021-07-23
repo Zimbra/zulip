@@ -628,7 +628,8 @@ if [ "$os_id" = centos ]; then
     fi
   else
     yum install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
-    yum install -y postgresql10-server postgresql10-devel python-psycopg2 hunspell-en-US
+    yum install -y postgresql10-server python-psycopg2 hunspell-en-US
+    yum install -y postgresql-devel
     chown -R postgres:postgres $POSTGRESQL_DIR
     sed -i "s~^Environment=PGDATA=.*~Environment=PGDATA=$POSTGRESQL_DATA_DIR~" /usr/lib/systemd/system/postgresql-10.service
     sudo systemctl daemon-reload

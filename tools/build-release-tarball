@@ -76,13 +76,21 @@ else
     PY_DEPS_VERSION=20
 fi
 
+
+
 PY_DEPS_PATH=${TMPDIR:?}/$prefix/packages/py-deps/
 mkdir -p $PY_DEPS_PATH
+mkdir -p "${TMPDIR:?}/$prefix/packages/all-py-deps/$PY_DEPS_NAME/$PY_DEPS_VERSION/."
+wget -c https://files.zimbra.com/downloads/zulip/packages/all-py-deps/$PY_DEPS_NAME$PY_DEPS_VERSION.tar.gz &&  tar -xzf  $PY_DEPS_NAME$PY_DEPS_VERSION.tar.gz -C "${TMPDIR:?}/$prefix/packages/all-py-deps/$PY_DEPS_NAME/$PY_DEPS_VERSION/."
+rm $PY_DEPS_NAME$PY_DEPS_VERSION.tar.gz 
 cp -a "${TMPDIR:?}/$prefix/packages/all-py-deps/$PY_DEPS_NAME/$PY_DEPS_VERSION/." "$PY_DEPS_PATH"
 
 if [ -n "$SYS_DEPS_NAME" ]; then
     SYS_DEPS_PATH=${TMPDIR:?}/$prefix/packages/sys-deps/
     mkdir -p $SYS_DEPS_PATH
+    mkdir -p "${TMPDIR:?}/$prefix/packages/all-system-deps/$SYS_DEPS_NAME/."
+    wget -c https://files.zimbra.com/downloads/zulip/packages/all-system-deps/$SYS_DEPS_NAME.tar.gz &&  tar -xzf  $SYS_DEPS_NAME.tar.gz -C "${TMPDIR:?}/$prefix/packages/all-system-deps/$SYS_DEPS_NAME/."
+    rm $SYS_DEPS_NAME.tar.gz
     cp -a "${TMPDIR:?}/$prefix/packages/all-system-deps/$SYS_DEPS_NAME/." "$SYS_DEPS_PATH"
 fi
 

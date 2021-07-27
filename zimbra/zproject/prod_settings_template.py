@@ -694,7 +694,7 @@ CAMO_URI = "/external_content/"
 # PRIVACY_POLICY = '/etc/zulip/privacy.md'
 
 ALLOWED_HOSTS = ['*']
-AUTHENTICATION_BACKENDS = ('zproject.backends.ZulipLDAPAuthBackend',)
+AUTHENTICATION_BACKENDS += ('zproject.backends.ZulipLDAPAuthBackend',)
 AUTH_LDAP_BIND_DN = 'uid=zimbra,cn=admins,cn=zimbra'
 AUTH_LDAP_REVERSE_EMAIL_SEARCH = LDAPSearch("", ldap.SCOPE_SUBTREE, "(mail=%(email)s)")
 AUTH_LDAP_USER_SEARCH = LDAPSearch("", ldap.SCOPE_SUBTREE, "(mail=%(user)s)")

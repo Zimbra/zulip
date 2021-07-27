@@ -562,6 +562,8 @@ DATA_DIR=/opt/zimbra/data/zulip
 POSTGRESQL_DIR=$DATA_DIR/postgresql
 ZULIP_UPLOAD_DIR=/home/zulip/uploads
 ZIMBRA_ZULIP_UPLOAD_DIR=$DATA_DIR/uploads
+CONF_DIR=$DATA_DIR/conf
+CERT_DIR=$DATA_DIR/cert
 
 if [ $os_id == "ubuntu" ] || [ $os_id == "debian" ]; then
     POSTGRESQL_DEFAULT_DATA_DIR=/var/lib/postgresql/$POSTGRESQL_VERSION
@@ -590,10 +592,16 @@ if [ ! -d "$ZIMBRA_ZULIP_UPLOAD_DIR" ]; then
     mkdir -p "$ZIMBRA_ZULIP_UPLOAD_DIR"
 fi
 
-if [ ! -d "$DATA_DIR/conf/" ]; then
-    echo "Create directory $DATA_DIR/conf/"
-    mkdir -p $DATA_DIR/conf/
-    chown zulip:zulip $DATA_DIR/conf/
+if [ ! -d "$CONF_DIR" ]; then
+    echo "Create directory $CONF_DIR"
+    mkdir -p $CONF_DIR
+    chown zulip:zulip $CONF_DIR
+fi
+
+if [ ! -d "$CERT_DIR" ]; then
+    echo "Create directory $CERT_DIR"
+    mkdir -p $CERT_DIR
+    chown zulip:zulip $CERT_DIR
 fi
 
 # change upload data path
@@ -781,8 +789,13 @@ fi
 )
 
 # copy settings
-cp -a /etc/zulip/. $DATA_DIR/conf/
-chown -R zulip:zulip $DATA_DIR/conf/
+cp -a /etc/zulip/. $CONF_DIR/
+chown -R zulip:zulip $CONF_DIR/
+
+# copy certificates
+cp -a /etc/ssl/certs/zulip.combined-chain.crt $CERT_DIR/
+cp -a /etc/ssl/private/zulip.key $CERT_DIR/
+chown -R zulip:zulip $CERT_DIR/
 
 if [ -n "$NO_INIT_DB" ]; then
     set +x

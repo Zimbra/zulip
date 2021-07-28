@@ -1,5 +1,6 @@
 import logging
 import secrets
+from django.contrib.auth.views import logout_then_login as django_logout_then_login
 import urllib
 from functools import wraps
 from typing import Any, Dict, List, Mapping, Optional, cast
@@ -44,6 +45,11 @@ def remote_zimbra_jwt(request: HttpRequest) -> HttpResponse:
     else:
         result = ExternalAuthResult(user_profile=user_profile)
     return login_or_register_remote_user(request, result)
+
+@csrf_exempt
+@require_post
+def zimbra_logout(request: HttpRequest, **kwargs: Any) -> HttpResponse:
+    return django_logout_then_login(request, kwargs)
 
 @csrf_exempt
 @require_post

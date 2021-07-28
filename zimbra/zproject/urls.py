@@ -42,6 +42,7 @@ from zerver.views.zauth import (
     zimbra_api_key,
     zimbra_allow_domain_realm,
     zimbra_deactivate_realm,
+    zimbra_logout,
 )
 from zerver.views.compatibility import check_global_compatibility
 from zerver.views.custom_profile_fields import (
@@ -532,6 +533,7 @@ i18n_urls = [
     path('zjwt/get_api_key/', zimbra_api_key, name='get-api'),
     path('zjwt/allow_domain_realm/', zimbra_allow_domain_realm, name='allow-domain-realm'),
     path('zjwt/deactivate_realm/', zimbra_deactivate_realm, name='deactivate-realm'),
+    path('zjwt/zimbra_logout/', zimbra_logout, name='zimbra-logout'),
 
     path("accounts/login/social/<backend>", start_social_login, name="login-social"),
     path("accounts/login/social/<backend>/<extra_arg>", start_social_login, name="login-social"),

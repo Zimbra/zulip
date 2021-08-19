@@ -78,3 +78,82 @@ Zulip is distributed under the
 [Apache 2.0](https://github.com/zulip/zulip/blob/master/LICENSE) license.
 
 [beginner-friendly]: https://github.com/zulip/zulip/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22
+
+## Zulip Upgrade process
+
+While upgrading zulip setup from. 4.3 to further releases.
+
+We have to check the following things.
+
+1. Create a branch from existing branch named --> zimbra-zulip-upgrade-x-x
+where x-x is the major-minor version.
+
+2. Check the differences between prod.txt in 4.3 and the higher version.
+
+3.  Download particular python libraries that. digress from the current version.
+
+using pip download <libname> -d <destination folder>
+
+copy these downloaded wheel files in a folder and upload them in respective folders for uploading in zimbra cloud in
+https://files.zimbra.com/downloads/zulip/packages/all-py-deps/
+
+4. Check the differences between files cascading in folder zulip/zimbra with files in zulip/
+all customisation regarding zimbra are included in zulip/zimbra
+all original zulip files are in root folder zulip
+
+add zimbra customization in zulip files as above.
+
+4. Read zulip release notes for particular release if any more specific changes are required.
+https://zulip.readthedocs.io/en/latest/overview/changelog.html
+
+5.  Once changes are complete, we need to follow the upgrade guide for zulip.
+
+    a. Commit the changes on the the branch
+
+    b. Push changes on the branch
+
+6.  Creating new upgraded tar from the changes.
+
+    a. Go to respective build servers.
+
+ 
+
+        u18 build - ubuntu@129.213.97.197
+
+        u20 build - ubuntu@132.145.200.135
+
+        cent7 build - opc@129.213.39.166
+
+    b. Pull the changes on the branch zimbra-zulip-upgrade-x-x
+
+         ssh on above servers.
+
+ 
+
+         cd zulip
+
+         git checkout <upgrade-branch>
+
+         git pull
+
+    c. Create new tars from the latest code.
+
+        for u18 
+
+        ./tools/build-release-tarball zimbra-installer-u18         
+
+         for u20
+
+         ./tools/build-release-tarball zimbra-installer-u20
+
+         for centos7
+
+         ./tools/build-release-tarball zimbra-installer-centos7
+
+ After creating these tars copy the tars to respective server. <zulip-server-VERSION.tar.gz>
+
+Please read upgrade notes before upgrading 
+https://zulip.readthedocs.io/en/latest/overview/changelog.html#upgrade-notes
+
+7. Log in to your Zulip production server and run as root:
+/home/zulip/deployments/current/scripts/upgrade-zulip zulip-server-VERSION.tar.gz

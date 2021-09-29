@@ -648,12 +648,27 @@ fi
 
 if [ "$os_id" = centos ]; then
   echo "########### firewall config for rabbitmq  ############"
+  isinstalled=$(rpm -q firewalld)
+  if [ !  "$isinstalled" == "package firewalld is not installed" ];
+  then
+  echo Package firewalld already installed
+  else
+  echo Firewalld is not installed
+  echo Installing firewalld
   rpm  -i --force  "$ZULIP_PATH"/packages/sys-deps/firewalld-0.6.3-13.el7_9.noarch.rpm
+  systemctl enable firewalld
+  fi
   sudo firewall-cmd --permanent --add-port=5672/tcp
   sudo firewall-cmd --reload
   sudo systemctl stop firewalld
   sudo systemctl start firewalld
+  enforcestatus=$(getenforce)
+  if [ ! "$enforcestatus" == "Permissive" ];
+  then
+  echo setenforce is set not equal to 0
+  echo setting  setenforce to 0 now
   sudo setenforce 0
+  fi
 fi
 
 if has_class "zulip::app_frontend_base"; then

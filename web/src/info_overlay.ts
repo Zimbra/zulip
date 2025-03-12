@@ -51,10 +51,6 @@ const markdown_help_rows = [
         markdown: ":heart:",
     },
     {
-        markdown: "[Zulip website](https://zulip.org)",
-        usage_html: format_usage_html("Ctrl", "Shift", "L"),
-    },
-    {
         markdown: "#**channel name**",
         output_html: "<p><a>#channel name</a></p>",
         effect_html: "(links to a channel)",
@@ -128,19 +124,19 @@ This text won't be visible until the user clicks.
     {
         markdown: `\
 \`\`\`
-def zulip():
-    print "Zulip"
+def zimbra():
+    print "Zimbra"
 \`\`\``,
     },
     {
         markdown: `\
 \`\`\`python
-def zulip():
-    print "Zulip"
+def zimbra():
+    print "Zimbra"
 \`\`\``,
         output_html: `\
-<div class="codehilite"><pre><span class="k">def</span> <span class="nf">zulip</span><span class="p">():</span>
-    <span class="k">print</span> <span class="s">"Zulip"</span></pre></div>`,
+<div class="codehilite"><pre><span class="k">def</span> <span class="nf">zimbra</span><span class="p">():</span>
+    <span class="k">print</span> <span class="s">"Zimbra"</span></pre></div>`,
     },
     {
         markdown: "Some inline math $$ e^{i \\pi} + 1 = 0 $$",

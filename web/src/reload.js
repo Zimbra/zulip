@@ -159,14 +159,33 @@ function do_reload_app(send_after_reload, save_compose, message_html) {
         // in the browser sending duplicate requests to `/`.
         $(window).one("focus", () => {
             blueslip.log("Retrying on-focus page reload");
-
-            window.location.reload(true);
+            if (window.parent && window.parent.location !== window.location) {
+                const iframe = window.parent.document.getElementById("chat-iframe");
+                const src = iframe && iframe.src;
+                if (src) {
+                    window.location.href = src;
+                } else {
+                    window.parent.location.reload(true);
+                }
+            } else {
+                window.location.reload(true);
+            }
         });
     }, 5000);
 
     function retry_reload() {
         blueslip.log("Retrying page reload due to 30s timer");
-        window.location.reload(true);
+        if (window.parent && window.parent.location !== window.location) {
+            const iframe = window.parent.document.getElementById("chat-iframe");
+            const src = iframe && iframe.src;
+            if (src) {
+                window.location.href = src;
+            } else {
+                window.parent.location.reload(true);
+            }
+        } else {
+            window.location.reload(true);
+        }
     }
     util.call_function_periodically(retry_reload, 30000);
 
@@ -176,7 +195,17 @@ function do_reload_app(send_after_reload, save_compose, message_html) {
         blueslip.error("Failed to clean up before reloading", undefined, error);
     }
 
-    window.location.reload(true);
+    if (window.parent && window.parent.location !== window.location) {
+        const iframe = window.parent.document.getElementById("chat-iframe");
+        const src = iframe && iframe.src;
+        if (src) {
+            window.location.href = src;
+        } else {
+            window.parent.location.reload(true);
+        }
+    } else {
+        window.location.reload(true);
+    }
 }
 
 export function initiate({

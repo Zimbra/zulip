@@ -644,7 +644,17 @@ export function initialize() {
     });
 
     $("body").on("click", ".reload_link", () => {
-        window.location.reload();
+        if (window.parent && window.parent.location !== window.location) {
+            const iframe = window.parent.document.getElementById("chat-iframe");
+            const src = iframe && iframe.src;
+            if (src) {
+                window.location.href = src;
+            } else {
+                window.parent.location.reload();
+            }
+        } else {
+            window.location.reload();
+        }
     });
 
     // COMPOSE

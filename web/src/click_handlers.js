@@ -41,6 +41,7 @@ import * as topic_list from "./topic_list";
 import * as ui_util from "./ui_util";
 import {parse_html} from "./ui_util";
 import * as util from "./util";
+import {reloadIframe} from "./reload";
 
 export function initialize() {
     // MESSAGE CLICKING
@@ -644,17 +645,7 @@ export function initialize() {
     });
 
     $("body").on("click", ".reload_link", () => {
-        if (window.parent && window.parent.location !== window.location) {
-            const iframe = window.parent.document.getElementById("chat-iframe");
-            const src = iframe && iframe.src;
-            if (src) {
-                window.location.href = src;
-            } else {
-                window.parent.location.reload();
-            }
-        } else {
-            window.location.reload();
-        }
+        reloadIframe(false);
     });
 
     // COMPOSE
